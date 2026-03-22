@@ -85,15 +85,192 @@ class PrizeFlower(FloweringPlant):
                 f", Prize points: {self.get_prize_points()}")
 
 
-#class GardenManager():
+class Garden:
+    def __init__(self, owner: str, plants: list[Plant]) -> None:
+        self.__owner: str = owner
+        self.__plants: list[Plant] = plants
+        self.__plant_amount = 0
+        for plant in plants:
+            self.__plant_amount += 1
 
-#    class GardenStats():
+    def get_owner(self) -> str:
+        return f"{self.__owner}"
+
+    def get_plants(self) -> list[Plant]:
+        return self.__plants
+
+    def get_amount_plants(self) -> int:
+        return self.__plant_amount
+
+    def add_plant(self, plant: Plant) -> None:
+        self.__plants += [plant]
+        self.__plant_amount += 1
+
+    def all_height(self) -> int:
+        total: int = 0
+        for plant in self.__plants:
+            total += plant.get_height()
+        return total
+
+    def all_growth(self) -> int:
+        total: int = 0
+        for plant in self.__plants:
+            total += plant.get_growth()
+        return total
+
+    def all_prize(self) -> int:
+        total: int = 0
+        for plant in self.__plants:
+            if plant.get_type() == "PrizeFlower":
+                total += plant.get_prize_points()
+        return total
+
+    def reset_plants(self, new_list: list[Plant]) -> None:
+        self.__plants = new_list
+
+
+class GardenManager:
+    """Creates a Garden Manager that manages plants and statistics"""
+
+    def __init__(self, gardens: list[Garden]):
+        self.__gardens: list[Garden] = []
+        self.__total_gardens = 0
+        for garden in gardens:
+            self.add_garden(garden)
+
+    class GardenStats:
+        """Nested class to calulate analitics"""
+
+        def report(garden: Garden) -> None:
+            plants = garden.get_plants()
+            owner = garden.get_owner()
+            type_count: dict[str, int] = {"Plant": 0,
+                                          "FloweringPlant": 0,
+                                          "PrizeFlower": 0}
+            print(f"=== {owner}'s Garden Report ===\n"
+                  f"Plants in garden:")
+            for plant in plants:
+                print(f"- {plant.get_name()}: {plant.get_info()}")
+                type_count[plant.get_type()] += 1
+            print(f"\nPlants added: {garden.get_amount_plants()}, "
+                  f"Total growth: {garden.all_growth()}cm")
+            print(f"Plant types: {type_count["Plant"]} regular, "
+                  f"{type_count["FloweringPlant"]} flowering, "
+                  f"{type_count["PrizeFlower"]} prize flower")
+
+    def report(self, owner: str) -> None:
+        """Calls function of helper class passing the Garden as argument"""
+        for garden in self.__gardens:
+            if garden.get_owner() == owner:
+                self.GardenStats.report(garden)
+
+    def add_garden(self, garden: Garden) -> None:
+        """Add garden to be managed"""
+        self.__gardens += [garden]
+        self.__total_gardens += 1
+
+    def grow_all(self, owner: str, growth: int) -> None:
+        """Grow all the plants from owner's garden by `growth` centimeters"""
+        if growth < 1:
+            pass
+        for garden in self.__gardens:
+            if garden.get_owner() == owner:
+                print(f"{garden.get_owner()} is helping all plants grow...")
+                for plant in garden.get_plants():
+                    plant.grow(growth)
+                    print(f"{plant.get_name()} grew {growth}cm")
+
+    def gardens_managed(self) -> int:
+        """Returns the amount of gardens being managed"""
+        return self.__total_gardens
+
+    def add_plant(self, owner: str, plant: Plant) -> None:
+        """Adds the plant to the owner's garden"""
+        for garden in self.__gardens:
+            if garden.get_owner() == owner:
+                garden.add_plant(plant)
+                print(f"Added {plant.get_name()} to {owner}'s garden")
+                return
+            print(f"{owner}'s garden doesn't exist!")
+
+    def del_plant(self, owner: str, plant: str) -> None:
+        """Re-do the plant list on owner's garden removing any 'delete'"""
+        for garden in self.__gardens:
+            if garden.get_owner() == owner:
+                plants = garden.get_plants()
+                new_list = [
+                    plant for plant in plants
+                    if plant.get_name() != plant
+                ]
+                garden.reset_plants(new_list)
+                break
+
+    def del_garden(self, owner: str):
+        """Remove the garden of the owner"""
+        self.__gardens = [
+            garden for garden in self.__gardens
+            if garden.get_owner() != owner
+                        ]
+
+    def scores(self) -> None:
+        """Print the scores for each garden managed"""
+        amount = self.__total_gardens
+        print("Garden scores - ", end="")
+        i = 0
+        for garden in self.__gardens:
+            score: int = 0
+            for plant in garden.get_plants():
+                score += plant.get_height() + (plant.get_growth() * 10)
+                if plant.get_type() == "PrizeFlower":
+                    score += plant.get_prize_points()
+            print(f"{garden.get_owner()}: {score}",
+                  end=", " if i < amount - 1 else "\n")
+            i += 1
+
+    @staticmethod
+    def height_validation(height: int) -> str:
+        """Validates if height value is positive"""
+        if height < 0:
+            return "False"
+        else:
+            return "True"
+
+    @classmethod
+    def create_garden_network(cls,
+                              gardens: list[Garden]
+                              ) -> list["GardenManager"]:
+        """Creates a manager per garden????"""
+        managers: list["GardenManager"] = []
+        for garden in gardens:
+            managers += [cls(garden)]
+        return managers
 
 
 if __name__ == "__main__":
-    pflower = PrizeFlower("Rose", 10, 10, "Blue", 10)
-    nflower = FloweringPlant("Tulip", 5, 5, "white")
-    plant = Plant("Avocado Tree", 50, 100)
-    print(f"Type of pflower = {pflower.get_type()}\n"
-          f"Type of nflower = {nflower.get_type()}\n"
-          f"Type of plant = {plant.get_type()}")
+    manager = GardenManager(
+        [Garden("Yuri", [
+                        PrizeFlower("Rose", 10, 10, "Blue", 10),
+                        FloweringPlant("Tulip", 5, 5, "white"),
+                        Plant("Avocado Tree", 50, 100)
+                        ]
+                )]
+    )
+    manager.add_garden(Garden("Cat", [
+        Plant("Orange Tree", 100, 50)
+    ]))
+    manager.add_garden(Garden("Mari", [
+        Plant("Narcisus", 10, 55)
+    ]))
+    print("=== Garden Management System Demo ===\n")
+    manager.add_plant("Yuri", Plant("Oak Tree", 100, 30))
+    manager.add_plant("Yuri", FloweringPlant("Rose", 25, 30, "red"))
+    manager.add_plant("Yuri", PrizeFlower("Sunflower", 50, 30, "yellow", 10))
+    print()
+    manager.del_plant("Yuri", "Tulip")
+    manager.grow_all("Yuri", 5)
+    print()
+    manager.report("Yuri")
+    print()
+    print(f"Height validation test: {manager.height_validation(10)}")
+    manager.scores()
+    print(f"Total gardens managed: {manager.gardens_managed()}")
