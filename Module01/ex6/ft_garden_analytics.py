@@ -193,14 +193,14 @@ class GardenManager:
                 return
             print(f"{owner}'s garden doesn't exist!")
 
-    def del_plant(self, owner: str, plant: str) -> None:
+    def del_plant(self, owner: str, remove: str) -> None:
         """Re-do the plant list on owner's garden removing any 'delete'"""
         for garden in self.__gardens:
             if garden.get_owner() == owner:
                 plants = garden.get_plants()
                 new_list = [
                     plant for plant in plants
-                    if plant.get_name() != plant
+                    if plant.get_name() != remove
                 ]
                 garden.reset_plants(new_list)
                 break
