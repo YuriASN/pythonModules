@@ -10,7 +10,7 @@ class Plant:
     def age(self) -> None:
         self.days_old += 1
 
-    def get_info(self) -> None:
+    def get_info(self) -> str:
         return f"{self.name}: {self.height}cm, {self.days_old} days old"
 
 
