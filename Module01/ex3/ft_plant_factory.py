@@ -1,6 +1,3 @@
-from typing import List
-
-
 class Plant:
     def __init__(self, name: str, height: int, days_old: int):
         self.name = name
@@ -17,9 +14,9 @@ class Plant:
         return f"{self.name}: {self.height}cm, {self.days_old} days old"
 
 
-def ft_plant_factory(new_plants: List[tuple]) -> List[Plant]:
+def ft_plant_factory(new_plants: list[tuple]) -> list[Plant]:
     total = 0
-    plants: List[Plant] = []
+    plants: list[Plant] = []
     print("=== Plant Factory Output ===")
     for p in new_plants:
         created = Plant(*p)

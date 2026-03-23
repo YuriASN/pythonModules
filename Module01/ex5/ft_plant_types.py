@@ -1,6 +1,3 @@
-from typing import List
-
-
 class Plant:
     def __init__(self, name: str, height: int, days_old: int):
         self.__name = name
@@ -102,13 +99,13 @@ class Vegetable(Plant):
 def ft_plant_types() -> None:
     print("=== Garden Plant Types ===")
 
-    garden_data: List = [(Flower, "Rose", 10, 9, "pink"),
+    garden_data: list = [(Flower, "Rose", 10, 9, "pink"),
                          (Flower, "Narcisus", 15, 10, "red"),
                          (Tree, "Jacaranda", 200, 3650, 50),
                          (Tree, "Oak", 86, 365, 25),
                          (Vegetable, "Carrot", 5, 8, "fall", "beta-carotene"),
                          (Vegetable, "Lettuce", 25, 30, "summer", "vitamin K")]
-    garden: List = [plant[0](*plant[1:]) for plant in garden_data]
+    garden: list = [plant[0](*plant[1:]) for plant in garden_data]
     for plant in garden:
         print()
         print(plant.get_info())
