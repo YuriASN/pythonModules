@@ -1,4 +1,6 @@
 class Plant:
+    """Represents a plant with simpel attributes"""
+
     def __init__(self, name: str, height: int, days_old: int) -> None:
         self.__name: str = name
         self.__height: int = 0
@@ -59,6 +61,9 @@ class Plant:
 
 
 class FloweringPlant(Plant):
+    """"Represents a flower that inherit from Plant,
+    but adding color and the ability to bloom"""
+
     def __init__(self, name: str, height: int, days_old: int, color: str):
         super().__init__(name, height, days_old)
         self.__color = color
@@ -83,6 +88,9 @@ class FloweringPlant(Plant):
 
 
 class PrizeFlower(FloweringPlant):
+    """Represents a flower the inherit from FloweringPlant and
+    have the extra attribute of prize points"""
+
     def __init__(self, name: str, height: int,
                  days_old: int, color: str, prize: int):
         super().__init__(name, height, days_old, color)
@@ -99,6 +107,8 @@ class PrizeFlower(FloweringPlant):
 
 
 class Garden:
+    """Represents a garden with a owner and a list of plants"""
+
     def __init__(self, owner: str, plants: list[Plant]) -> None:
         self.__owner: str = owner
         self.__plants: list[Plant] = plants
