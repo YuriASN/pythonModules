@@ -5,8 +5,8 @@ class Plant:
 
     def __init__(self, name: str, height: float, days_old: int):
         self._name = name
-        self._height = 0
-        self._days_old = 0
+        self._height: float = 0
+        self._days_old: int = 0
         if height > 0:
             self._height = height
         self._days_old = 0
@@ -34,7 +34,7 @@ class Plant:
         """Return the age of the plant"""
         return self._days_old
 
-    def get_height(self) -> int:
+    def get_height(self) -> float:
         """Return the height of the plant"""
         return self._height
 
@@ -73,7 +73,7 @@ class Flower(Plant):
         """Returns the color of the flower"""
         return f"{self._color}"
 
-    def bloom(self) -> str:
+    def bloom(self) -> None:
         """Change status of flower bloom to true"""
         self._bloom = True
 
@@ -97,7 +97,7 @@ class Tree(Plant):
         """Return the diameter of the trunk of the tree."""
         return self._trunk_diameter
 
-    def produce_shade(self) -> str:
+    def produce_shade(self) -> None:
         """Print a string telling the shade that the tree is producing"""
 
         if self.get_height() <= 0:

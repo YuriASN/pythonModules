@@ -5,8 +5,8 @@ class Plant:
 
     def __init__(self, name: str, height: float, days_old: int):
         self._name = name
-        self._height = 0
-        self._days_old = 0
+        self._height: float = 0
+        self._days_old: int = 0
         if height > 0:
             self._height = height
         self._days_old = 0
@@ -85,7 +85,7 @@ class Plant:
             print(f"{self._name}: Error, age can't be negative\n"
                   f"Age update rejected")
 
-    def get_height(self) -> int:
+    def get_height(self) -> float:
         """Return the height of the plant"""
         return self._height
 
@@ -113,7 +113,7 @@ class Flower(Plant):
         """Returns the color of the flower"""
         return f"{self._color}"
 
-    def bloom(self) -> str:
+    def bloom(self) -> None:
         """Change status of flower bloom to true"""
         self._bloom = True
 
@@ -149,6 +149,7 @@ class Tree(Plant):
     def __init__(self, name: str, height: float, days: int, trunk_diam: int):
         super().__init__(name, height, days)
         self._trunk_diameter = trunk_diam
+        self._stats = self.Stats()
 
     class Stats(Plant.Stats):
         def __init__(self) -> None:
@@ -166,7 +167,7 @@ class Tree(Plant):
         """Return the diameter of the trunk of the tree."""
         return self._trunk_diameter
 
-    def produce_shade(self) -> str:
+    def produce_shade(self) -> None:
         """Print a string telling the shade that the tree is producing"""
 
         if self.get_height() <= 0:
@@ -194,10 +195,10 @@ def main() -> None:
     print("=== Check year-old")
     days = 30
     print(f"Is {days} days more than a year? -> "
-          f"{garden["flower"].check_year_old(days)}")
+          f"{garden['flower'].check_year_old(days)}")
     days = 400
     print(f"Is {days} days more than a year? -> "
-          f"{garden["flower"].check_year_old(days)}")
+          f"{garden['flower'].check_year_old(days)}")
 
     print("\n=== Flower")
     garden["flower"].show()
