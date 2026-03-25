@@ -23,7 +23,7 @@ def week_growth(plant: Plant) -> None:
         plant.show()
         plant.grow(0.8)
         plant.age(1)
-    print(f"Growth this week: +{plant.height - first_height:.0f}cm")
+    print(f"Growth this week: {plant.height - first_height:.0f}cm")
 
 
 if __name__ == "__main__":
