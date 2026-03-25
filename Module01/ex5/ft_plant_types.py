@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 class Plant:
+    """Base class for any type of plant"""
+
     def __init__(self, name: str, height: float, days_old: int):
         self._name = name
         self._height = 0
+        self._days_old = 0
         if height > 0:
             self._height = height
         self._days_old = 0
@@ -11,25 +14,34 @@ class Plant:
             self._days_old = days_old
 
     def grow(self, growth: float) -> None:
-        self.height += growth
+        """Grow the plant by 'growth' centimeters"""
+        self._height += growth
 
     def age(self, days_passed: int) -> None:
-        self.days_old += days_passed
+        """Age the plant by 'days_passed' days"""
+        self._days_old += days_passed
 
     def show(self) -> None:
+        """Print the full data of the plant"""
         print(f"{self._name}: {self._height:.1f}cm, "
               f"{self._days_old} days old")
 
     def get_name(self) -> str:
+        """Return the name of the plant"""
         return f"{self._name}"
 
     def get_age(self) -> int:
+        """Return the age of the plant"""
         return self._days_old
 
     def get_height(self) -> int:
+        """Return the height of the plant"""
         return self._height
 
     def set_age(self, new_age: int) -> None:
+        """Set the age (new_age) for the plant.
+        If new-age has a valid value"""
+
         if new_age > 0:
             self._days_old = new_age
             print(f"Age updated: {self._days_old} days")
@@ -38,6 +50,9 @@ class Plant:
                   f"Age update rejected")
 
     def set_height(self, new_height: int) -> None:
+        """Set the height (new_height) of the plant.
+        If new_height is a valid value"""
+
         if new_height > 0:
             self._height = new_height
             print(f"Height updated: {self._height}cm")
@@ -47,80 +62,107 @@ class Plant:
 
 
 class Flower(Plant):
-    def __init__(self, name: str, height: int, days_old: int, color: str):
+    """Flower class that inherits from Plant class"""
+
+    def __init__(self, name: str, height: float, days_old: int, color: str):
         super().__init__(name, height, days_old)
         self._color = color
+        self._bloom = False
 
     def get_color(self) -> str:
+        """Returns the color of the flower"""
         return f"{self._color}"
 
     def bloom(self) -> str:
-        if self.get_age() < 10:
-            return (f"{self.get_name()} is {self.get_age()} days old. "
-                    f"It's too young to bloom!")
-        else:
-            return (f"{self.get_name()} is blooming beautifully!")
+        """Change status of flower bloom to true"""
+        self._bloom = True
 
-    def get_info(self) -> str:
-        return (super().get_info() + f", {self.get_color()} color")
+    def show(self) -> None:
+        super().show()
+        print(f" Color: {self.get_color()}")
+        if self._bloom:
+            print(" Rose is blooming beautifully!")
+        else:
+            print(" Rose has not bloomed yet")
 
 
 class Tree(Plant):
-    def __init__(self, name: str, height: int, days_old: int, trunk_diam: int):
-        super().__init__(name, height, days_old)
-        self._trunk_diam = trunk_diam
+    """Tree class that inherits from Plant class"""
+
+    def __init__(self, name: str, height: float, days: int, trunk_diam: int):
+        super().__init__(name, height, days)
+        self._trunk_diameter = trunk_diam
 
     def get_trunk_diam(self) -> int:
-        return self._trunk_diam
+        """Return the diameter of the trunk of the tree."""
+        return self._trunk_diameter
 
     def produce_shade(self) -> str:
-        if self.get_height() <= 0:
-            return f"{self.get_name()} isn't high enough to produce a shade."
-        else:
-            return (f"{self.get_name()} provides "
-                    f"{self.get_height() * 0.03:.0f} square meters of shade")
+        """Print a string telling the shade that the tree is producing"""
 
-    def get_info(self) -> str:
-        return (super().get_info() + f", {self.get_trunk_diam()}cm diameter")
+        if self.get_height() <= 0:
+            print(f"{self.get_name()} isn't high enough to produce a shade.")
+        elif self._trunk_diameter <= 0:
+            print(f"{self.get_name()} isn't large enough to produce a shade.")
+        else:
+            print(f"Tree {self.get_name()} now produces a shade of "
+                  f"{self._height:.1f}cm long and {self._trunk_diameter:.1f}cm"
+                  f" wide.")
+
+    def show(self) -> None:
+        super().show()
+        print(f" Trunk diameter: {self.get_trunk_diam():.1f}cm")
 
 
 class Vegetable(Plant):
-    def __init__(self, name: str, height: int, days_old: int,
-                 harvest_season: str, nutritional_value: str):
+    """Vegetable class that inherits from Plant class"""
+
+    def __init__(self, name: str, height: float, days_old: int,
+                 harvest_season: str):
         super().__init__(name, height, days_old)
-        self._harvest_s = harvest_season
-        self._nutri_value = nutritional_value
+        self._harvest_season = harvest_season
+        self._nutritional_value = 0
 
-    def get_harvest(self) -> str:
-        return self._harvest_s
+    def age(self, days_passed: int) -> None:
+        """Age the plant by 'days_passed' days,
+        and add the same amount for nutritional value"""
+        self._nutritional_value += days_passed
+        super().age(days_passed)
 
-    def get_nutri_value(self) -> str:
-        return f"{self.get_name()} is rich in {self._nutri_value}"
+    def grow(self, growth: float) -> None:
+        # self._nutritional_value += 1
+        super().grow(growth)
 
-    def get_info(self) -> str:
-        return (super().get_info() + f", {self.get_harvest()} harvest")
+    def show(self) -> None:
+        super().show()
+        print(f" Harvest season: {self._harvest_season}")
+        print(f" Nutritional value: {self._nutritional_value}")
 
 
-def ft_plant_types() -> None:
+def main() -> None:
     print("=== Garden Plant Types ===")
 
-    garden_data: list = [(Flower, "Rose", 10, 9, "pink"),
-                         (Flower, "Narcisus", 15, 10, "red"),
-                         (Tree, "Jacaranda", 200, 3650, 50),
-                         (Tree, "Oak", 86, 365, 25),
-                         (Vegetable, "Carrot", 5, 8, "fall", "beta-carotene"),
-                         (Vegetable, "Lettuce", 25, 30, "summer", "vitamin K")]
-    garden: list = [plant[0](*plant[1:]) for plant in garden_data]
-    for plant in garden:
-        print()
-        print(plant.get_info())
-        if plant.get_type() == "Flower":
-            print(plant.bloom())
-        elif plant.get_type() == "Tree":
-            print(plant.produce_shade())
-        if plant.get_type() == "Vegetable":
-            print(plant.get_nutri_value())
+    garden: dict = {"flower": Flower("Rose", 15, 10, "pink"),
+                    "tree": Tree("Oak", 200, 365, 5),
+                    "vegetable": Vegetable("Tomato", 5, 10, "April")}
+    print("=== Flower")
+    garden["flower"].show()
+    print("[asking the rose to bloom]")
+    garden["flower"].bloom()
+    garden["flower"].show()
+
+    print("\n=== Tree")
+    garden["tree"].show()
+    print("[asking the oak to produce shade]")
+    garden["tree"].produce_shade()
+
+    print("\n=== Vegetable")
+    garden["vegetable"].show()
+    print("[make tomato grow and age for 20 days]")
+    garden["vegetable"].grow(42)
+    garden["vegetable"].age(20)
+    garden["vegetable"].show()
 
 
 if __name__ == "__main__":
-    ft_plant_types()
+    main()
