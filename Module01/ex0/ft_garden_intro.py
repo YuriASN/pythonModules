@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def garden_intro(plant_type: str, height: str, days: str) -> None:
     print("Plant: " + plant_type)
     print("Height: " + height)

@@ -1,14 +1,19 @@
+#!/usr/bin/env python3
+
 class Plant:
     def __init__(self, name: str, height: int, age: int):
         self.name = name
         self.height = height
         self.age = age
 
+    def show(self) -> None:
+        print(f"{self.name}: {self.height}cm, {self.age} days old")
+
 
 def ft_garden_data(garden: list[Plant]) -> None:
     print("=== Garden Plant Registry ===")
     for i in garden:
-        print(f"{i.name}: {i.height}cm, {i.age} days old")
+        i.show()
 
 
 def main() -> None:

@@ -1,30 +1,29 @@
+#!/usr/bin/env python3
+
 class Plant:
-    def __init__(self, name: str, height: int, days_old: int):
+    def __init__(self, name: str, height: float, days_old: int):
         self.name = name
         self.height = height
         self.days_old = days_old
 
-    def grow(self) -> None:
-        self.height += 1
+    def grow(self, growth: float) -> None:
+        self.height += growth
 
-    def age(self) -> None:
-        self.days_old += 1
+    def age(self, days_passed: int) -> None:
+        self.days_old += days_passed
 
-    def get_info(self) -> str:
-        return f"{self.name}: {self.height}cm, {self.days_old} days old"
+    def show(self) -> None:
+        print(f"{self.name}: {self.height:.1f}cm, {self.days_old} days old")
 
 
 def ft_plant_factory(new_plants: list[tuple]) -> list[Plant]:
-    total = 0
     plants: list[Plant] = []
     print("=== Plant Factory Output ===")
     for p in new_plants:
         created = Plant(*p)
-        print(f"Created: {created.name} "
-              f"({created.height}cm, {created.days_old} days)")
-        total += 1
+        print("Created: ", end="")
+        created.show()
         plants.append(created)
-    print(f"\nTotal plants created: {total}")
     return plants
 
 
@@ -35,4 +34,3 @@ if __name__ == "__main__":
               ("Jacaranda", 50, 47),
               ("Oak", 30, 30)]
     new_plants = ft_plant_factory(garden)
-    print(f"Garden has from {new_plants[0].name} to {new_plants[4].name}")

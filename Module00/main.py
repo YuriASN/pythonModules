@@ -7,12 +7,12 @@ sys.dont_write_bytecode = True
 
 EXERCISES = {
     "0": (0, ["ft_hello_garden"]),
-    "1": (1, ["ft_plot_area"]),
-    "2": (2, ["ft_harvest_total"]),
-    "3": (3, ["ft_plant_age"]),
-    "4": (4, ["ft_water_reminder"]),
-    "5": (5, ["ft_count_harvest_iterative", "ft_count_harvest_recursive"]),
-    "6": (6, ["ft_garden_summary"]),
+    "1": (1, ["ft_garden_name"]),
+    "2": (2, ["ft_plot_area"]),
+    "3": (3, ["ft_harvest_total"]),
+    "4": (4, ["ft_plant_age"]),
+    "5": (5, ["ft_water_reminder"]),
+    "6": (6, ["ft_count_harvest_iterative", "ft_count_harvest_recursive"]),
     "7": (7, ["ft_seed_inventory"]),
 }
 
@@ -70,12 +70,12 @@ def print_menu():
     print("This helper will test your exercises for you.\n")
 
     print("0 - ft_hello_garden")
-    print("1 - ft_plot_area")
-    print("2 - ft_harvest_total")
-    print("3 - ft_plant_age")
-    print("4 - ft_water_reminder")
-    print("5 - ft_count_harvest")
-    print("6 - ft_garden_summary")
+    print("1 - ft_garden_name")
+    print("2 - ft_plot_area")
+    print("3 - ft_harvest_total")
+    print("4 - ft_plant_age")
+    print("5 - ft_water_reminder")
+    print("6 - ft_count_harvest")
     print("7 - ft_seed_inventory")
     print("a - test all exercises\n")
 

@@ -1,53 +1,58 @@
+#!/usr/bin/env python3
+
 class Plant:
-    def __init__(self, name: str, height: int, days_old: int):
-        self.__name = name
-        self.__height = 0
-        self.__days_old = 0
-        self.set_height(height)
-        self.set_age(days_old)
+    def __init__(self, name: str, height: float, days_old: int):
+        self._name = name
+        self._height = 0
+        if height > 0:
+            self._height = height
+        self._days_old = 0
+        if days_old > 0:
+            self._days_old = days_old
 
-    def grow(self) -> None:
-        self.__height += 1
+    def grow(self, growth: float) -> None:
+        self.height += growth
 
-    def age(self) -> None:
-        self.__days_old += 1
+    def age(self, days_passed: int) -> None:
+        self.days_old += days_passed
+
+    def show(self) -> None:
+        print(f"{self._name}: {self._height:.1f}cm, "
+              f"{self._days_old} days old")
 
     def get_name(self) -> str:
-        return f"{self.__name}"
+        return f"{self._name}"
 
     def get_age(self) -> int:
-        return self.__days_old
+        return self._days_old
 
     def get_height(self) -> int:
-        return self.__height
+        return self._height
 
     def set_age(self, new_age: int) -> None:
         if new_age > 0:
-            self.__days_old = new_age
+            self._days_old = new_age
+            print(f"Age updated: {self._days_old} days")
         else:
-            print(f"Invalid operation attempted: age {new_age} days [REJECTED]"
-                  f"\nSecurity: Negative age rejected\n\nCurrent plant: "
-                  f"{self.__name} ({self.__height}cm, {self.__days_old} days)")
+            print(f"{self._name}: Error, age can't be negative\n"
+                  f"Age update rejected")
 
     def set_height(self, new_height: int) -> None:
         if new_height > 0:
-            self.__height = new_height
+            self._height = new_height
+            print(f"Height updated: {self._height}cm")
         else:
-            print(f"\nInvalid operation attempted: height {new_height}cm "
-                  f"[REJECTED]\nSecurity: Negative height rejected")
-
-    def get_info(self) -> str:
-        return (f"{self.__name} ({self.__class__.__name__}): "
-                f"{self.__height}cm, {self.__days_old} days old")
+            print(f"{self._name}: Error, height can't be negative\n"
+                  f"Height update rejected")
 
 
 class Flower(Plant):
     def __init__(self, name: str, height: int, days_old: int, color: str):
         super().__init__(name, height, days_old)
-        self.__color = color
+        self._color = color
 
     def get_color(self) -> str:
-        return f"{self.__color}"
+        return f"{self._color}"
 
     def bloom(self) -> str:
         if self.get_age() < 10:
@@ -63,10 +68,10 @@ class Flower(Plant):
 class Tree(Plant):
     def __init__(self, name: str, height: int, days_old: int, trunk_diam: int):
         super().__init__(name, height, days_old)
-        self.__trunk_diam = trunk_diam
+        self._trunk_diam = trunk_diam
 
     def get_trunk_diam(self) -> int:
-        return self.__trunk_diam
+        return self._trunk_diam
 
     def produce_shade(self) -> str:
         if self.get_height() <= 0:
@@ -83,14 +88,14 @@ class Vegetable(Plant):
     def __init__(self, name: str, height: int, days_old: int,
                  harvest_season: str, nutritional_value: str):
         super().__init__(name, height, days_old)
-        self.__harvest_s = harvest_season
-        self.__nutri_value = nutritional_value
+        self._harvest_s = harvest_season
+        self._nutri_value = nutritional_value
 
     def get_harvest(self) -> str:
-        return self.__harvest_s
+        return self._harvest_s
 
     def get_nutri_value(self) -> str:
-        return f"{self.get_name()} is rich in {self.__nutri_value}"
+        return f"{self.get_name()} is rich in {self._nutri_value}"
 
     def get_info(self) -> str:
         return (super().get_info() + f", {self.get_harvest()} harvest")
@@ -109,11 +114,11 @@ def ft_plant_types() -> None:
     for plant in garden:
         print()
         print(plant.get_info())
-        if plant.__class__.__name__ == "Flower":
+        if plant.get_type() == "Flower":
             print(plant.bloom())
-        elif plant.__class__.__name__ == "Tree":
+        elif plant.get_type() == "Tree":
             print(plant.produce_shade())
-        if plant.__class__.__name__ == "Vegetable":
+        if plant.get_type() == "Vegetable":
             print(plant.get_nutri_value())
 
 
