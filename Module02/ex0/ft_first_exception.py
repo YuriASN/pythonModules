@@ -24,7 +24,7 @@ def test_temperature() -> None:
 
     print()
 
-    temp: str = "abc"
+    temp = "abc"
     print(f"Input data is '{temp}'")
     try:
         int_temp = input_temperature(temp)

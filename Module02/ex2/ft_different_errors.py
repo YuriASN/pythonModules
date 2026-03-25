@@ -1,12 +1,12 @@
-def garden_operations(operation_number: int) -> int:
+def garden_operations(operation_number: int) -> None:
     try:
         match operation_number:
             case 0:
-                return int("abc")
+                int("abc")
             case 1:
-                return 23/0
+                23/0
             case 2:
-                return open("not/found")
+                open("not/found")
             case 3:
                 print("this is string plus " + 25)
             case 4:
