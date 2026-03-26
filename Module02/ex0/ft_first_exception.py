@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def input_temperature(temp_str: str) -> int:
     """Returns the value as an int, if it's valid"""
 

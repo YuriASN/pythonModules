@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class ProjectError(Exception):
     """Base of project exception errors"""
     pass
