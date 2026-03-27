@@ -7,17 +7,13 @@ class GardenError(Exception):
 
 class PlantError(GardenError):
     """Base class for plant errors"""
-    def __init__(self, plant: str, error: str | None) -> None:
-        if error is None:
-            error = f"Invalid plant name to water: '{plant}'"
+    def __init__(self, plant: str, error: str = "Unknown plant error") -> None:
         super().__init__(error)
 
 
 class WaterError(GardenError):
     """Base class for water errors"""
-    def __init__(self, error: str | None) -> None:
-        if error is None:
-            error = "Not enough water in the tank!"
+    def __init__(self, error: str = "Unknown plant error") -> None:
         super().__init__(error)
 
 
