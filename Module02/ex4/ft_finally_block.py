@@ -25,16 +25,13 @@ class Plant:
         self._water = 4
 
     def get_name(self) -> str:
-        """Returns the name of the plant"""
         return f"{self._name}"
 
     def get_status(self) -> str:
-        """Returns a string of the status of the plan,
-        accordingly to the amount of water that it has"""
-        if self._water < 5:
+        if self._water >= 5:
             return f"{self._name} is looking good"
         else:
-            raise PlantError(self._name, None)
+            raise PlantError(f"The {self._name} plant is wilting!")
 
     def pass_time(self) -> None:
         """Pass 5 days, growing 1cm and losing 1 water"""
@@ -54,7 +51,7 @@ def water_plant(plant: Plant) -> None:
         plant.watering()
         print(f"Watering {plant.get_name()}: [OK]")
     else:
-        raise PlantError(plant.get_name(), None)
+        raise PlantError(f"Invalid plant name to water: '{name}'")
 
 
 def test_watering_system(plants: list[Plant]) -> None:
