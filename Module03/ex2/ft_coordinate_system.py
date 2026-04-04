@@ -11,7 +11,7 @@ def get_player_pos() -> tuple:
         if len(coordenates) != 3:
             print("Invalid sintax")
             continue
-        values: list[int] = []
+        values: list[float] = []
         for point in coordenates:
             try:
                 values.append(float(point))
@@ -23,7 +23,7 @@ def get_player_pos() -> tuple:
 
 
 def distance_3d(x1: float, y1: float, z1: float,
-                x2: float, y2: float, z2: float) -> float:
+                x2: float = 0, y2: float = 0, z2: float = 0) -> float:
     distance: float = math.sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2)
     return distance
 
@@ -34,7 +34,7 @@ def main() -> None:
     pos_1 = get_player_pos()
     print(f"Got a first tuple: {pos_1}")
     print(f"It includes: X={pos_1[0]}, Y={pos_1[1]}, Z={pos_1[2]}")
-    print(f"Distance to center: {distance_3d(*pos_1, 0, 0, 0):.4f}\n")
+    print(f"Distance to center: {distance_3d(*pos_1):.4f}\n")
 
     print("Get a first set of coordinates")
     pos_2 = get_player_pos()

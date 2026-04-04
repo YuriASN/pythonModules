@@ -70,19 +70,23 @@ def main() -> None:
     print(f"Item list: {list(inventory.keys())}")
     print(f"Total quantity of the {total_itens} items: "
           f"{total_values}")
-    highest: list[str, int] = ["default", 0]
-    lowest: list[str, int] = ["default", 9999999]
+    highest: int = 0
+    lowest: int = 9999999
     for item in inventory.keys():
-        if inventory[item] < lowest[1]:
-            lowest[0] = item
-            lowest[1] = inventory[item]
-        if inventory[item] > highest[1]:
-            highest[0] = item
-            highest[1] = inventory[item]
+        if inventory[item] < lowest:
+            lowest = inventory[item]
+        if inventory[item] > highest:
+            highest = inventory[item]
         print(f"Item {item} represents "
               f"{inventory[item] / total_values * 100:.1f}%")
-    print(f"Item most abundant: {highest[0]} with quantity {highest[1]}")
-    print(f"Item most abundant: {lowest[0]} with quantity {lowest[1]}")
+    for item in inventory:
+        if inventory[item] == highest:
+            print(f"Item most abundant: {item} with quantity {highest}")
+            break
+    for item in inventory:
+        if inventory[item] == lowest:
+            print(f"Item most abundant: {item} with quantity {lowest}")
+            break
     inventory["new_item"] = 20
     print(f"Updated inventory: {inventory}")
 

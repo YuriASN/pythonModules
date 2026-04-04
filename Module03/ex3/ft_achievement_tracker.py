@@ -30,7 +30,7 @@ def main() -> None:
     ]
     print("=== Achievement Tracker System ===\n")
     for player in players:
-        print(f"Player {player["name"]}: {player["achievements"]}")
+        print(f"Player {player['name']}: {player['achievements']}")
     all_on_players: set = {achiev for player in players
                            for achiev in player["achievements"]}
     common_achiev = all_on_players
@@ -44,12 +44,11 @@ def main() -> None:
             if p["name"] == player["name"]:
                 continue
             only_one = only_one.difference(p["achievements"])
-        print(f"Only {player["name"]} has: {only_one}")
+        print(f"Only {player['name']} has: {only_one}")
     print()
     for player in players:
-        print(f"{player["name"]} is missing: {set.difference(
-            all_on_players,
-            player["achievements"])}")
+        missing = set.difference(all_on_players, player['achievements'])
+        print(f"{player['name']} is missing: {missing}")
 
 
 if __name__ == "__main__":

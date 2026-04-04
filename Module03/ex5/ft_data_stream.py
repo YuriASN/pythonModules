@@ -38,8 +38,8 @@ def main() -> None:
         print(f"Event {i}: Player {name} did action {action}")
     ten_events: list = [next(event) for i in range(10)]
     print(f"Built list of 10 events: {ten_events}")
-    for event in consume_event(ten_events):
-        print(f"Got event from list: {event}")
+    for each in consume_event(ten_events):
+        print(f"Got event from list: {each}")
         print(f"Remains in list: {ten_events}")
 
 
