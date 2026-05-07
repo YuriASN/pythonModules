@@ -20,7 +20,7 @@ def output_file(file: str) -> None:
         opened.close()
         print(f"File '{file}'closed.\n")
     except Exception as err:
-        print(f"Error opening file '{file}': {err}", file=sys.stderr)
+        print(f"[STDERR] Error opening file '{file}': {err}", file=sys.stderr)
         return
     try:
         print("Transform data:\n---\n")
@@ -38,7 +38,7 @@ def output_file(file: str) -> None:
         else:
             print("Not saving data.")
     except Exception as err:
-        print(f"Writting transformed data to file: {err}", file=sys.stderr)
+        print(f"[STDERR] Writting transformed data to '{trans_file}': {err}", file=sys.stderr)
 
 
 if __name__ == "__main__":
