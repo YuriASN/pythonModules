@@ -6,10 +6,11 @@ import sys
 def output_file(file: str) -> None:
     try:
         print(f"Accessing file '{file}'")
-        with open(file, "r") as opened:
-            print("---\n")
-            print(opened.read(), end="")
-            print("\n---")
+        opened = open(file, "r")
+        print("---\n")
+        print(opened.read(), end="")
+        print("\n---")
+        opened.close()
         print(f"File '{file}'closed.")
     except Exception as err:
         print(f"Error opening file '{file}': {err}")
