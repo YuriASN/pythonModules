@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 
+import sys
 
-def main() -> None:
-    print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
-    print("Accessing Storage Vault: ancient_fragment.txt")
+
+def output_file(file: str) -> None:
     try:
-        with open("ancient_fragment.txt", "r") as file:
-            print("Connection established...\n")
-            print("RECOVERED DATA:")
-            print(file.read())
-            print("\nData recovery complete. Storage unit disconnected.")
-    except (PermissionError, IsADirectoryError, FileNotFoundError):
-        print("ERROR: Storage vault not found.")
+        print(f"Accessing file '{file}'")
+        with open(file, "r") as opened:
+            print("---\n")
+            print(opened.read(), end="")
+            print("\n---")
+        print(f"File '{file}'closed.")
+    except Exception as err:
+        print(f"Error opening file '{file}': {err}")
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 2:
+        print("Usage: ft_ancient_text.py <file>")
+    else:
+        print("=== Cyber Archives Recovery ===")
+        output_file(sys.argv[1])

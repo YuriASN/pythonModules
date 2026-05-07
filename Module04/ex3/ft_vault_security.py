@@ -1,24 +1,41 @@
 #!/usr/bin/env python3
 
 
-def main() -> None:
-    print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===\n")
-    print("Initiating secure vault access...")
+def secure_archive(file_name: str, action: str = "r",
+                   content: str = "") -> tuple[bool, str]:
+    """
+    Read or write to 'file_name' accordlingly to the action received.
+
+    Args:
+        file_name: File to work with.
+        action: 'r' for read and 'w' for write.
+        content: String to write to file in case of action being 'w'.
+    """
     try:
-        print("Vault connection established with failsafe protocols\n\n"
-              "SECURE EXTRACTION:")
-        with open("classified_data.txt", "r") as file:
-            print(file.read())
-        print("\nSECURE PRESERVATION:")
-        with open("preservated.txt", "w") as file:
-            file.write("[CLASSIFIED] New security protocols archived")
-        with open("preservated.txt", "r") as file:
-            print(file.read())
-        print("Vault automatically sealed upon completion")
-    except (PermissionError, IsADirectoryError, FileNotFoundError) as err:
-        print(err)
-    print("\nAll vault operations completed with maximum security.")
+        if action == "r" or "w":
+            with open(file_name, action) as opened:
+                if action == "r":
+                    return (True, opened.read())
+                else:
+                    opened.write(content)
+                    return (True, 'Content successfully written to file')
+        else:
+            return (False, 'Action to perform isn\'t \'r\' or \'w\'')
+    except Exception as err:
+        return (False, f'{err}')
 
 
 if __name__ == "__main__":
-    main()
+    print("=== Cyber Archives Security ===\n")
+    print("Using 'secure_archive' to read from a nonexistent file:\n"
+          f"{secure_archive("not/existing/file", "r")}")
+    print()
+    print("Using 'secure_archive' to read from an inaccessible file:\n"
+          f"{secure_archive("/etc/master.passwd", "r")}")
+    print()
+    readed = secure_archive("this.txt", "r")
+    print("Using 'secure_archive' to read from a regular file:\n"
+          f"{readed}")
+    print()
+    print("Using 'secure_archive' to write previous content to a new file:\n"
+          f"{secure_archive("newex3", "w", readed[1])}")
