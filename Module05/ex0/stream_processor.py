@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-class DataProcesssor(ABC):
+class DataProcessor(ABC):
     def __init__(self) -> None:
         super().__init__()
         self.data: list[str] = []
@@ -24,7 +24,7 @@ class DataProcesssor(ABC):
         return (poped, self.data.pop(0))
 
 
-class NumericProcessor(DataProcesssor):
+class NumericProcessor(DataProcessor):
     def __init__(self):
         super().__init__()
 
@@ -58,7 +58,7 @@ class NumericProcessor(DataProcesssor):
         return super().output()
 
 
-class TextProcessor(DataProcesssor):
+class TextProcessor(DataProcessor):
     def __init__(self):
         super().__init__()
 
@@ -88,7 +88,7 @@ class TextProcessor(DataProcesssor):
         return super().output()
 
 
-class LogProcessor(DataProcesssor):
+class LogProcessor(DataProcessor):
     def __init__(self):
         super().__init__()
 
