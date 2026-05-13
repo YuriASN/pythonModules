@@ -18,9 +18,11 @@ def words_only(string: str) -> list[str]:
 def validate_ingredients(ingredients: str) -> str:
     from .light_spellbook import light_spell_allowed_ingredients
     usable = light_spell_allowed_ingredients()
+    for word in usable:
+        word = word.lower()
     check = "INVALID"
     for word in words_only(ingredients):
-        if word.lower() in usable.lower(): #list dont have lower
+        if word.lower() in usable:
             check = "VALID"
             break
     return (f"{ingredients} - {check}")
