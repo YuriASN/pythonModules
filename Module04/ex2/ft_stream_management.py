@@ -38,7 +38,8 @@ def output_file(file: str) -> None:
         else:
             print("Not saving data.")
     except Exception as err:
-        print(f"[STDERR] Writting transformed data to '{trans_file}': {err}", file=sys.stderr)
+        print(f"[STDERR] Writting transformed data to '{trans_file}': {err}",
+              file=sys.stderr)
 
 
 if __name__ == "__main__":
