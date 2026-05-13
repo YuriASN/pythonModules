@@ -35,7 +35,6 @@ class NumericProcessor(DataProcessor):
         if not self.validate(data):
             raise Exception("Imporoper numeric data")
         try:
-            print(f" Processing data: {data}")
             if isinstance(data, list):
                 for value in data:
                     self.data.append(str(value))
@@ -66,7 +65,6 @@ class TextProcessor(DataProcessor):
         if not self.validate(data):
             raise Exception("Improper text data")
         try:
-            print(f" Processing data: {data}")
             if isinstance(data, list):
                 self.data += [value for value in data]
             else:
@@ -101,7 +99,6 @@ class LogProcessor(DataProcessor):
         try:
             if not self.validate(data):
                 raise Exception("Data type isn't 'Log'")
-            print(f" Processing data: {data}")
             if isinstance(data, list):
                 for each in data:
                     value = get_value(each)
@@ -154,6 +151,7 @@ if __name__ == "__main__":
         print(f" Got exception: {err}")
     try:
         num_data = [1, 2, 3, 4, 5]
+        print(f" Processing data: {num_data}")
         nump.ingest(num_data)
         returned_data = nump.output
         print(" Extracting 3 values...")
@@ -176,6 +174,7 @@ if __name__ == "__main__":
         print(f" Got exception: {err}")
     try:
         text_data = ['Hello', '2 gether', 'Nexus', 'World']
+        print(f" Processing data: {text_data}")
         textp.ingest(text_data)
         returned_data = textp.output
         print(" Extracting 2 values...")
@@ -195,6 +194,7 @@ if __name__ == "__main__":
                      'log_message': 'Connection to server'},
                     {'log_level': 'ERROR',
                      'log_message': 'Unauthorized access!!'}]
+        print(f" Processing data: {log_data}")
         logp.ingest(log_data)
         returned_data = logp.output
         print(" Extracting 2 values...")
