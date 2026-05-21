@@ -53,9 +53,6 @@ class NumericProcessor(DataProcessor):
         except Exception as err:
             raise err
 
-    def output(self) -> tuple[int, str]:
-        return super().output()
-
 
 class TextProcessor(DataProcessor):
     def __init__(self):
@@ -81,9 +78,6 @@ class TextProcessor(DataProcessor):
             return False
         except Exception as err:
             raise err
-
-    def output(self) -> tuple[int, str]:
-        return super().output()
 
 
 class LogProcessor(DataProcessor):
@@ -128,9 +122,6 @@ class LogProcessor(DataProcessor):
             return False
         except Exception as err:
             raise err
-
-    def output(self) -> tuple[int, str]:
-        return super().output()
 
 
 class DataStream():
