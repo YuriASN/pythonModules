@@ -2,7 +2,7 @@
 
 try:
     from typing import List, Dict
-    from importlib.metadata import distributions, version
+    from importlib.metadata import version
     import requests
     import pandas as pd
     import matplotlib.pyplot as plt
