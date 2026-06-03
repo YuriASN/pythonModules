@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ex1"
+version = "0.1.0"
+description = "Sub-region data analysis"
+authors = ["ysantos-"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.34.2"
+pandas = "^3.0.3"
+pandas-stubs = "^3.0.3.260530"
+matplotlib = "^3.10.9"
+typing-extensions = "^4.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
