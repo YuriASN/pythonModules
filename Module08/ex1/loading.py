@@ -14,7 +14,8 @@ except ImportError as err:
     exit(1)
 
 
-RESTAPI: str = "https://restcountries.com/v3.1/"
+RESTAPI: str = "https://api.restcountries.com/countries/v5"
+APIKEY: str = ""
 
 
 def print_dependencies() -> None:
@@ -30,16 +31,22 @@ def print_dependencies() -> None:
         raise Exception()
 
 
-def get_sub_region(region: str) -> List[Dict]:
+def get_region(region: str) -> List[Dict]:
+    if APIKEY == "":
+        raise Exception("Err: No API KEY provided")
     try:
-        region_data = requests.get(RESTAPI + "subregion/" + region, timeout=10)
+        region_data = requests.get(
+            RESTAPI + "?region=" + region,
+            headers={'Authorization': 
+                     'Bearer ' + APIKEY}
+            )
         region_data.raise_for_status()
         return region_data.json()
     except Exception as err:
         raise Exception(f"Requesting from API: {err}")
 
 
-def print_sub_region_data(region: List[Dict]) -> None:
+def print_region_data(region: List[Dict]) -> None:
     try:
         for country in region:
             print(f"{country['name']['common']} {country['flag']}"
@@ -60,6 +67,7 @@ if __name__ == "__main__":
     try:
         print("LOADING STATUS: Loading programs...\n")
         print_dependencies()
+        region = get_region("europe")
         try:
             df = pd.DataFrame([{
                 "name": country["name"]["common"],
@@ -67,7 +75,7 @@ if __name__ == "__main__":
                 "area": country["area"],
                 "timezones": country["timezones"],
                 "currencies": country["currencies"]
-            } for country in get_sub_region("Northern Europe")
+            } for country in region
             ])
         except Exception as err:
             raise Exception(f"Creating data frame: {err}")
