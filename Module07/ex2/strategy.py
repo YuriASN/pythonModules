@@ -21,13 +21,13 @@ class NormalStrategy(BattleStrategy):
         super().__init__()
 
     def act(self, creature: Creature) -> None:
-        if not self.is_valid(creature):
+        if creature and not self.is_valid(creature):
             raise Exception(f"Ivalid Creature '{creature.name}' for this "
                             "normal strategy")
         print(creature.attack())
 
     def is_valid(self, creature: Creature) -> bool:
-        if not isinstance(creature, Creature):
+        if not creature or not isinstance(creature, Creature):
             return False
         return True
 
@@ -37,7 +37,7 @@ class AggressiveStrategy(BattleStrategy):
         super().__init__()
 
     def act(self, creature: Creature) -> None:
-        if isinstance(creature, TransformCapability):
+        if creature and isinstance(creature, TransformCapability):
             print(f"{creature.transform()}\n{creature.attack()}\n"
                   f"{creature.revert()}")
         else:
@@ -45,7 +45,7 @@ class AggressiveStrategy(BattleStrategy):
                             "aggresive strategy")
 
     def is_valid(self, creature: Creature) -> bool:
-        if not isinstance(creature, TransformCapability):
+        if not creature or not isinstance(creature, TransformCapability):
             return False
         return True
 
@@ -55,13 +55,13 @@ class DefensiveStrategy(BattleStrategy):
         super().__init__()
 
     def act(self, creature: Creature) -> None:
-        if isinstance(creature, HealCapability):
+        if creature and isinstance(creature, HealCapability):
             print(f"{creature.attack()}\n{creature.heal()}")
         else:
             raise Exception(f"Ivalid Creature '{creature.name}' for this "
                             "defensive strategy")
 
     def is_valid(self, creature: Creature) -> bool:
-        if not isinstance(creature, HealCapability):
+        if not creature or not isinstance(creature, HealCapability):
             return False
         return True

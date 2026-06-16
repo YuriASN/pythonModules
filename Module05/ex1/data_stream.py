@@ -132,76 +132,88 @@ class DataStream():
         self.processors[proc] = 0
 
     def process_stream(self, stream: list[Any]) -> None:
-        for value in stream:
-            ingested = False
-            for proc in self.processors.keys():
-                if proc.validate(value):
-                    ingested = True
-                    proc.ingest(value)
-                    if isinstance(value, list):
-                        self.processors[proc] += len(value)
-                    else:
-                        self.processors[proc] += 1
-            if not ingested:
-                print("DataStream error - Can't process element in "
-                      f"stream: {value}")
+        try:
+            for value in stream:
+                ingested = False
+                for proc in self.processors.keys():
+                    if proc.validate(value):
+                        ingested = True
+                        proc.ingest(value)
+                        if isinstance(value, list):
+                            self.processors[proc] += len(value)
+                        else:
+                            self.processors[proc] += 1
+                if not ingested:
+                    print("DataStream error - Can't process element in "
+                          f"stream: {value}")
+        except Exception as err:
+            raise Exception(f"process_stream(): {err}")
 
     def print_processors_stats(self) -> None:
-        if not len(self.processors):
-            print("No processor found, no data")
-            return
-        for proc in self.processors.keys():
-            if isinstance(proc, NumericProcessor):
-                print(f"Numeric Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
-            elif isinstance(proc, TextProcessor):
-                print(f"Text Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
-            elif isinstance(proc, LogProcessor):
-                print(f"Log Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
+        try:
+            if not len(self.processors):
+                print("No processor found, no data")
+                return
+            for proc in self.processors.keys():
+                if isinstance(proc, NumericProcessor):
+                    print(f"Numeric Processor: total {self.processors[proc]} "
+                          f"items processed, remaining {len(proc.data)}"
+                          " on processor")
+                elif isinstance(proc, TextProcessor):
+                    print(f"Text Processor: total {self.processors[proc]} "
+                          f"items processed, remaining {len(proc.data)}"
+                          " on processor")
+                elif isinstance(proc, LogProcessor):
+                    print(f"Log Processor: total {self.processors[proc]} items"
+                          f" processed, remaining {len(proc.data)}"
+                          " on processor")
+        except Exception as err:
+            raise Exception(f"print_processors_stats(): {err}")
 
 
 if __name__ == "__main__":
-    data = [
-        'Hello world',
-        [3.14, -1, 2.71],
-        [{'log_level': 'WARNING',
-          'log_message': 'Telnet access! Use ssh instead'},
-         {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
-        42,
-        ['Hi', 'five']
-        ]
-    print("=== Code Nexus - Data Stream ===\n\nInitialize Data Stream...")
-    stream = DataStream()
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print()
+    try:
+        data = [
+            'Hello world',
+            [3.14, -1, 2.71],
+            [{'log_level': 'WARNING',
+              'log_message': 'Telnet access! Use ssh instead'},
+             {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
+            42,
+            ['Hi', 'five']
+            ]
+        print("=== Code Nexus - Data Stream ===\n\nInitialize Data Stream...")
+        stream = DataStream()
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print()
 
-    print("Registering Numeric Processor\n")
-    stream.register_processor(NumericProcessor())
-    print(f"Send first batch of data on stream: {data}")
-    stream.process_stream(data)
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
+        print("Registering Numeric Processor\n")
+        stream.register_processor(NumericProcessor())
+        print(f"Send first batch of data on stream: {data}")
+        stream.process_stream(data)
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
 
-    print('\nRegistering other data processors')
-    stream.register_processor(TextProcessor())
-    stream.register_processor(LogProcessor())
-    print("Send the same batch again")
-    stream.process_stream(data)
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print("\nConsume some elements from the data processors: "
-          "Numeric 3, Text 2, Log 1")
-    for proc in stream.processors.keys():
-        if isinstance(proc, NumericProcessor):
-            for i in range(3):
-                proc.output()
-        elif isinstance(proc, TextProcessor):
-            for i in range(2):
-                proc.output()
-        elif isinstance(proc, LogProcessor):
-            for i in range(1):
-                proc.output()
-    stream.print_processors_stats()
+        print('\nRegistering other data processors')
+        stream.register_processor(TextProcessor())
+        stream.register_processor(LogProcessor())
+        print("Send the same batch again")
+        stream.process_stream(data)
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print("\nConsume some elements from the data processors: "
+              "Numeric 3, Text 2, Log 1")
+        for proc in stream.processors.keys():
+            if isinstance(proc, NumericProcessor):
+                for i in range(3):
+                    proc.output()
+            elif isinstance(proc, TextProcessor):
+                for i in range(2):
+                    proc.output()
+            elif isinstance(proc, LogProcessor):
+                for i in range(1):
+                    proc.output()
+        stream.print_processors_stats()
+    except Exception as err:
+        print(err)

@@ -138,13 +138,16 @@ class JsonExport(ExportPlugin):
         super().__init__()
 
     def process_output(self, data: list[tuple[int, str]]) -> None:
-        output: str = "{"
-        for index, value in data:
-            output += f'"item_{index}": "{value}"'
-            if index < len(data) - 1:
-                output += ", "
-        output += "}"
-        print(f"JSON Output:\n{output}")
+        try:
+            output: str = "{"
+            for index, value in data:
+                output += f'"item_{index}": "{value}"'
+                if index < len(data) - 1:
+                    output += ", "
+            output += "}"
+            print(f"JSON Output:\n{output}")
+        except Exception as err:
+            raise Exception(f"JSON process_output(): {err}")
 
 
 class CsvExport(ExportPlugin):
@@ -152,12 +155,15 @@ class CsvExport(ExportPlugin):
         super().__init__()
 
     def process_output(self, data: list[tuple[int, str]]) -> None:
-        output: str = ""
-        for index, value in data:
-            output += value
-            if index < len(data) - 1:
-                output += ","
-        print(f"CSV Output:\n{output}")
+        try:
+            output: str = ""
+            for index, value in data:
+                output += value
+                if index < len(data) - 1:
+                    output += ","
+            print(f"CSV Output:\n{output}")
+        except Exception as err:
+            raise Exception(f"CSV process_output(): {err}")
 
 
 class DataStream():
@@ -168,98 +174,113 @@ class DataStream():
         self.processors[proc] = 0
 
     def process_stream(self, stream: list[Any]) -> None:
-        for value in stream:
-            ingested = False
-            for proc in self.processors.keys():
-                if proc.validate(value):
-                    ingested = True
-                    proc.ingest(value)
-                    if isinstance(value, list):
-                        self.processors[proc] += len(value)
-                    else:
-                        self.processors[proc] += 1
-            if not ingested:
-                print("DataStream error - Can't process element in "
-                      f"stream: {value}")
+        try:
+            for value in stream:
+                ingested = False
+                for proc in self.processors.keys():
+                    if proc.validate(value):
+                        ingested = True
+                        proc.ingest(value)
+                        if isinstance(value, list):
+                            self.processors[proc] += len(value)
+                        else:
+                            self.processors[proc] += 1
+                if not ingested:
+                    print("DataStream error - Can't process element in "
+                          f"stream: {value}")
+        except Exception as err:
+            raise Exception(f"process_stream(): {err}")
 
     def print_processors_stats(self) -> None:
-        if not len(self.processors):
-            print("No processor found, no data")
-            return
-        for proc in self.processors.keys():
-            if isinstance(proc, NumericProcessor):
-                print(f"Numeric Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
-            elif isinstance(proc, TextProcessor):
-                print(f"Text Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
-            elif isinstance(proc, LogProcessor):
-                print(f"Log Processor: total {self.processors[proc]} items"
-                      f" processed, remaining {len(proc.data)} on processor")
+        try:
+            if not len(self.processors):
+                print("No processor found, no data")
+                return
+            for proc in self.processors.keys():
+                if isinstance(proc, NumericProcessor):
+                    print(f"Numeric Processor: total {self.processors[proc]} "
+                          f"items processed, remaining {len(proc.data)}"
+                          " on processor")
+                elif isinstance(proc, TextProcessor):
+                    print(f"Text Processor: total {self.processors[proc]} "
+                          f"items processed, remaining {len(proc.data)}"
+                          " on processor")
+                elif isinstance(proc, LogProcessor):
+                    print(f"Log Processor: total {self.processors[proc]} items"
+                          f" processed, remaining {len(proc.data)}"
+                          " on processor")
+        except Exception as err:
+            raise Exception(f"print_processors_stats(): {err}")
 
     def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
-        for each_type in self.processors:
-            all_outputs: list = []
-            for _ in range(nb):
-                if len(each_type.data):
-                    all_outputs.append(each_type.output())
-            plugin.process_output(all_outputs)
+        try:
+            for each_type in self.processors:
+                all_outputs: list = []
+                for _ in range(nb):
+                    if len(each_type.data):
+                        all_outputs.append(each_type.output())
+                plugin.process_output(all_outputs)
+        except Exception as err:
+            raise Exception(f"output_pipeline(): {err}")
 
 
 if __name__ == "__main__":
-    csv_data = [
-        'Hello world',
-        [3.14, -1, 2.71],
-        [{'log_level': 'WARNING',
-          'log_message': 'Telnet access! Use ssh instead'},
-         {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
-        42,
-        ['Hi', 'five']
+    try:
+        csv_data = [
+            'Hello world',
+            [3.14, -1, 2.71],
+            [{'log_level': 'WARNING',
+              'log_message': 'Telnet access! Use ssh instead'},
+             {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
+            42,
+            ['Hi', 'five']
+            ]
+        json_data = [
+            21,
+            ['I love AI', 'LLMs are wonderful', 'Stay healthy'],
+            [{'log_level': 'ERROR', 'log_message': '500 server crash'},
+             {'log_level': 'NOTICE', 'log_message': 'Certificate expires in 10'
+              'days'}],
+            [32, 42, 64, 84, 128, 168],
+            'World hello'
         ]
-    json_data = [
-        21,
-        ['I love AI', 'LLMs are wonderful', 'Stay healthy'],
-        [{'log_level': 'ERROR', 'log_message': '500 server crash'},
-         {'log_level': 'NOTICE', 'log_message': 'Certificate expires in 10'
-          'days'}],
-        [32, 42, 64, 84, 128, 168],
-        'World hello'
-    ]
-    print("=== Code Nexus - Data Stream ===\n\nInitialize Data Stream...")
-    stream = DataStream()
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print()
+        print("=== Code Nexus - Data Stream ===\n\nInitialize Data Stream...")
+        stream = DataStream()
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print()
 
-    print("\nRegistering Processors\n")
-    stream.register_processor(NumericProcessor())
-    stream.register_processor(TextProcessor())
-    stream.register_processor(LogProcessor())
-    print()
+        print("\nRegistering Processors\n")
+        stream.register_processor(NumericProcessor())
+        stream.register_processor(TextProcessor())
+        stream.register_processor(LogProcessor())
+        print()
 
-    print(f"Send first batch of data on stream: {csv_data}\n")
-    stream.process_stream(csv_data)
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print()
+        print(f"Send first batch of data on stream: {csv_data}\n")
+        stream.process_stream(csv_data)
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print()
 
-    print("Send 3 processed data from each processor to a CSV plugin:")
-    stream.output_pipeline(3, CsvExport())
-    print()
+        print("Send 3 processed data from each processor to a CSV plugin:")
+        stream.output_pipeline(3, CsvExport())
+        print()
 
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print()
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print()
 
-    print(f"Send another batch of data: {json_data}\n")
-    stream.process_stream(json_data)
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-    print()
+        print(f"Send another batch of data: {json_data}\n")
+        stream.process_stream(json_data)
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+        print()
 
-    print("Send 5 processed data from each processor to a JSON plugin")
-    stream.output_pipeline(5, JsonExport())
-    print()
+        print("Send 5 processed data from each processor to a JSON plugin")
+        stream.output_pipeline(5, JsonExport())
+        print()
 
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
+        print("== DataStream statistics ==")
+        stream.print_processors_stats()
+    except Exception as err:
+        print(err)

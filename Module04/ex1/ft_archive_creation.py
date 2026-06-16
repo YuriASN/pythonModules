@@ -20,7 +20,7 @@ def output_file(file: str) -> None:
         opened.close()
         print(f"File '{file}'closed.\n")
     except Exception as err:
-        print(f"Error opening file '{file}': {err}")
+        raise Exception(f"Error opening file '{file}': {err}")
     try:
         print("Transform data:\n---\n")
         print(transformed)
@@ -35,13 +35,16 @@ def output_file(file: str) -> None:
         else:
             print("Not saving data.")
     except Exception as err:
-        print(f"Writting transformed data to file: {err}")
+        raise Exception(f"Writting transformed data to file: {err}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: ft_ancient_text.py <file>")
-    else:
-        print("=== Cyber Archives Recovery ===")
-        output_file(sys.argv[1])
-        print()
+    try:
+        if len(sys.argv) != 2:
+            print("Usage: ft_ancient_text.py <file>")
+        else:
+            print("=== Cyber Archives Recovery ===")
+            output_file(sys.argv[1])
+            print()
+    except Exception as err:
+        print(err)

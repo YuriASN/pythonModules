@@ -25,29 +25,33 @@ def battle(opponents: list[tuple[CreatureFactory, BattleStrategy]]) -> None:
 
 
 if __name__ == "__main__":
-    aqua_f = AquaFactory()
-    flame_f = FlameFactory()
-    healing_f = HealingCreatureFactory()
-    trans_f = TransformCreatureFactory()
+    try:
+        aqua_f = AquaFactory()
+        flame_f = FlameFactory()
+        healing_f = HealingCreatureFactory()
+        trans_f = TransformCreatureFactory()
 
-    normal_s = NormalStrategy()
-    aggresive_s = AggressiveStrategy()
-    defensive_s = DefensiveStrategy()
+        normal_s = NormalStrategy()
+        aggresive_s = AggressiveStrategy()
+        defensive_s = DefensiveStrategy()
 
-    opponents = [(flame_f, normal_s),
-                 (healing_f, defensive_s)]
-    print("Tournament 0 (basic)\n [ (Flameling+Normal), (Healing+Defensive)")
-    battle(opponents)
+        opponents = [(flame_f, normal_s),
+                     (healing_f, defensive_s)]
+        print("Tournament 0 (basic)\n"
+              " [ (Flameling+Normal), (Healing+Defensive) ]")
+        battle(opponents)
 
-    opponents = [(flame_f, aggresive_s),
-                 (healing_f, defensive_s)]
-    print("\nTournament 1 (error)\n [ (Flameling+Aggressive), "
-          "(Healing+Defensive) ]")
-    battle(opponents)
+        opponents = [(flame_f, aggresive_s),
+                     (healing_f, defensive_s)]
+        print("\nTournament 1 (error)\n"
+              " [ (Flameling+Aggressive), (Healing+Defensive) ]")
+        battle(opponents)
 
-    opponents = [(aqua_f, normal_s),
-                 (healing_f, defensive_s),
-                 (trans_f, aggresive_s)]
-    print("\nTournament 2 (multiple)\n [ (Aquabub+Normal), "
-          "(Healing+Defensive), (Transform+Aggressive) ]")
-    battle(opponents)
+        opponents = [(aqua_f, normal_s),
+                     (healing_f, defensive_s),
+                     (trans_f, aggresive_s)]
+        print("\nTournament 2 (multiple)\n [ (Aquabub+Normal), "
+              "(Healing+Defensive), (Transform+Aggressive) ]")
+        battle(opponents)
+    except Exception as err:
+        print(err)

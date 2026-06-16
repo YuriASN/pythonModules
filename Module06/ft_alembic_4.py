@@ -8,6 +8,7 @@ def test_create_air() -> None:
 
 
 def test_create_earth() -> None:
+    # Have a mypy error stated on subject's page 8
     print(f"Testing the hidden create_earth: {alchemy.create_earth()}")
 
 
