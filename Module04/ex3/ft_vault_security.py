@@ -29,16 +29,16 @@ if __name__ == "__main__":
     try:
         print("=== Cyber Archives Security ===\n")
         print("Using 'secure_archive' to read from a nonexistent file:\n"
-            f"{secure_archive('not/existing/file', 'r')}")
+              f"{secure_archive('not/existing/file', 'r')}")
         print()
         print("Using 'secure_archive' to read from an inaccessible file:\n"
-            f"{secure_archive('perm.txt', 'r')}")
+              f"{secure_archive('perm.txt', 'r')}")
         print()
         readed = secure_archive("data.txt", "r")
         print("Using 'secure_archive' to read from a regular file:\n"
-            f"{readed}")
+              f"{readed}")
         print()
-        print("Using 'secure_archive' to write previous content to a new file:\n"
-            f"{secure_archive('newex3', 'w', readed[1])}")
+        print("Using 'secure_archive' to write previous content to a new "
+              f"file:\n{secure_archive('newex3', 'w', readed[1])}")
     except Exception as err:
         print(err)
