@@ -48,7 +48,7 @@ class SpaceMission(BaseModel):
         description="Budget for the mission in million dolars")
 
     @model_validator(mode="after")
-    def validate(self):
+    def validate(self) -> "SpaceMission":
         if not self.mission_id[0] == "M":
             raise ValueError("Mission ID must start with 'M'")
         captain_commander = False
@@ -65,7 +65,7 @@ class SpaceMission(BaseModel):
                 "Mission must have at least one Commander or Captain")
         if experienced < len(self.crew) / 2 and self.duration_days > 365:
             raise ValueError("Need at least 50% of the crew with more than 5 "
-                             "years of experience for a long mission."
+                             "years of experience for a long mission. "
                              f"Currently {experienced}/{len(self.crew)} are.")
         return self
 
@@ -82,62 +82,57 @@ if __name__ == "__main__":
         for person in mission.crew:
             print(f"- {person.name} ({person.rank.value}) - "
                   f"{person.specialization}")
+
+    try:
+        from data_generator import CrewMissionGenerator, DataConfig
+    except Exception as err:
+        print(f"Importing data generation module: {err}")
+        exit(1)
+    
     try:
         print("Space Mission Crew Validation\n"
               "=========================================")
-        mission_one = SpaceMission(
-            mission_id="M_ONE",
-            mission_name="Mission One",
-            destination="Nebula",
-            launch_date="2026-06-12T14:51:14",
-            duration_days=900,
-            budget_millions=2500.3,
-            crew=[
-                CrewMember(
-                    member_id="SCN",
-                    name="Sarah Connor",
-                    rank="commander",
-                    age=55,
-                    specialization="Mission Command",
-                    years_experience=35,
-                ),
-                CrewMember(
-                    member_id="JSM",
-                    name="John Smith",
-                    rank="lieutenant",
-                    age=40,
-                    specialization="Navigation",
-                    years_experience=20
-                ),
-                CrewMember(
-                    member_id="AJH",
-                    name="Alice Johnson",
-                    rank="officer",
-                    age=30,
-                    specialization="Engineering",
-                    years_experience=4
-                )
-            ]
-        )
-        print_mission_data(mission_one)
+        generator = CrewMissionGenerator(DataConfig(11, datetime(2026, 6, 15)))
+        missions = generator.generate_mission_data(3)
+        for mission in missions:
+            current = SpaceMission(
+                mission_id=mission["mission_id"],
+                mission_name=mission["mission_name"],
+                destination=mission["destination"],
+                launch_date=mission["launch_date"],
+                duration_days=mission["duration_days"],
+                budget_millions=mission["budget_millions"],
+                crew=[CrewMember(
+                    member_id=each["member_id"],
+                    name=each["name"],
+                    rank=each["rank"],
+                    age=each["age"],
+                    specialization=each["specialization"],
+                    years_experience=each["years_experience"],
+                    is_active=each["is_active"]
+                ) for each in mission["crew"]]
+            )
+            print_mission_data(current)
+            print("\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n")
 
         print("\n=========================================\n"
               "Expected validation error:")
         mission_fail = SpaceMission(
-            mission_id="M_FAIL",
+            mission_id="N_FAIL",
             mission_name="Mission Fail",
             destination="Nebula",
-            launch_date="2026-06-12T14:51:14",
+            launch_date=datetime.now(),
             duration_days=900,
             budget_millions=2500.3,
             crew=[
                 CrewMember(
                     member_id="SCN",
                     name="Sarah Connor",
-                    rank="cadet",
+                    rank="officer",
                     age=55,
                     specialization="Cleaning",
-                    years_experience=35
+                    years_experience=35,
+                    is_active=False
                 ),
                 CrewMember(
                     member_id="JSM",
@@ -145,7 +140,7 @@ if __name__ == "__main__":
                     rank="lieutenant",
                     age=40,
                     specialization="Navigation",
-                    years_experience=20
+                    years_experience=4
                 ),
                 CrewMember(
                     member_id="AJH",
