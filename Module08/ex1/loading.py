@@ -3,9 +3,9 @@
 try:
     from typing import List, Dict
     from importlib.metadata import version
-    import requests
-    import pandas as pd
-    import matplotlib.pyplot as plt
+    import requests  # type: ignore
+    import pandas as pd  # type: ignore
+    import matplotlib.pyplot as plt  # type: ignore
 except ImportError as err:
     print(f"Missing dependency: {err}")
     print("Install packages and run it again.\nUsing pip:\n"
@@ -18,31 +18,39 @@ RESTAPI: str = "https://restcountries.com/v3.1/"
 
 
 def print_dependencies() -> None:
-    print("Checking dependencies:")
-    print(f"[OK] pandas ({version("pandas")}) - Data manipulation ready")
-    print(f"[OK] requests ({version("requests")}) - Network access ready")
-    print(f"[OK] matplotlib ({version("matplotlib")}) - Visualization ready")
-    print(f"[OK] numpy ({version("numpy")}) - Numerical computation ready\n")
+    try:
+        print("Checking dependencies:")
+        print(f"[OK] pandas ({version('pandas')}) - Data manipulation ready")
+        print(f"[OK] requests ({version('requests')}) - Network access ready")
+        print(f"[OK] matplotlib ({version('matplotlib')})"
+              " - Visualization ready")
+        print(f"[OK] numpy ({version('numpy')})"
+              " - Numerical computation ready\n")
+    except Exception:
+        raise Exception()
 
 
 def get_sub_region(region: str) -> List[Dict]:
-    region_data = requests.get(RESTAPI + "subregion/" + region, timeout=10)
-    region_data.raise_for_status()
-    return region_data.json()
+    try:
+        region_data = requests.get(RESTAPI + "subregion/" + region, timeout=10)
+        region_data.raise_for_status()
+        return region_data.json()
+    except Exception as err:
+        raise Exception(f"Requesting from API: {err}")
 
 
 def print_sub_region_data(region: List[Dict]) -> None:
     try:
         for country in region:
-            print(f"{country["name"]["common"]} {country["flag"]}"
-                  f"\n\tArea: {country["area"]}km"
-                  f"\n\tPopulation: {country["population"]}"
+            print(f"{country['name']['common']} {country['flag']}"
+                  f"\n\tArea: {country['area']}km"
+                  f"\n\tPopulation: {country['population']}"
                   "\n\tCapital: "
-                  f"{', '.join(city for city in country["capital"])}"
+                  f"{', '.join(city for city in country['capital'])}"
                   "\n\tTimezones: "
-                  f"{', '.join(zone for zone in country["timezones"])}"
+                  f"{', '.join(zone for zone in country['timezones'])}"
                   "\n\tCurrencies: "
-                  f"{', '.join(str(curr) for curr in country["currencies"])}"
+                  f"{', '.join(str(curr) for curr in country['currencies'])}"
                   "\n")
     except Exception as err:
         raise Exception(f"Printing region data: {err}")

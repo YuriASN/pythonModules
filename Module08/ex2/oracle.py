@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-#os, sys, python-dotenv modules, file operation
 import os
-from typing import List, Dict
-from dotenv import load_dotenv
+from typing import Dict
+from dotenv import load_dotenv  # type: ignore
 
 
 def get_file_env() -> Dict:
@@ -14,7 +13,7 @@ def get_file_env() -> Dict:
                 key, value = line.strip().split("=")
                 envs[key] = value
     except FileNotFoundError:
-        raise FileNotFoundError(f"Missing the '{".env"}' file")
+        raise FileNotFoundError("Missing the '.env' file")
     except Exception as err:
         raise Exception(f"While parsing the '.env' file: {err}")
     return envs
@@ -37,8 +36,8 @@ def get_env_vars() -> Dict:
             if value is None:
                 if not len(file_envs):
                     file_envs = get_file_env()
-                if not key in file_envs.keys():
-                        raise KeyError(f"'{key}' not found in '.env'")
+                if key not in file_envs.keys():
+                    raise KeyError(f"'{key}' not found in '.env'")
                 envs[key] = file_envs[key]
 
     except Exception as err:
@@ -49,16 +48,16 @@ def get_env_vars() -> Dict:
 def display_env_data(envs: Dict) -> None:
     try:
         print("ORACLE STATUS: Reading the Matrix...\n\nConfiguration loaded:")
-        print(f"Mode: {envs["MATRIX_MODE"]}\n"
-            f"Database: {envs["DATABASE_URL"]}\n"
-            f"API Access: {envs["API_KEY"]}\n"
-            f"Log Level: {envs["LOG_LEVEL"]}\n"
-            f"Zion Network: {envs["ZION_ENDPOINT"]}\n")
+        print(f'Mode: {envs["MATRIX_MODE"]}\n'
+              f'Database: {envs["DATABASE_URL"]}\n'
+              f'API Access: {envs["API_KEY"]}\n'
+              f'Log Level: {envs["LOG_LEVEL"]}\n'
+              f'Zion Network: {envs["ZION_ENDPOINT"]}\n')
         print("Environment security check:\n"
-            "[OK] No hardcoded secrets detected\n"
-            "[OK] .env file properly configured\n"
-            "[OK] Production overrides available\n\n"
-            "The Oracle sees all configurations.")
+              "[OK] No hardcoded secrets detected\n"
+              "[OK] .env file properly configured\n"
+              "[OK] Production overrides available\n\n"
+              "The Oracle sees all configurations.")
     except Exception as err:
         print(f"Printing data: {err}")
 
@@ -69,6 +68,7 @@ def access_mainframe() -> None:
         display_env_data(envs)
     except BaseException as err:
         print(err)
+
 
 if __name__ == "__main__":
     access_mainframe()
