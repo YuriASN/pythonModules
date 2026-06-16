@@ -128,9 +128,8 @@ class ExportPlugin(Protocol):
     def __init__(self):
         super().__init__()
 
-    @abstractmethod
     def process_output(self, data: list[tuple[int, str]]) -> None:
-        pass
+        ...
 
 
 class JsonExport(ExportPlugin):
