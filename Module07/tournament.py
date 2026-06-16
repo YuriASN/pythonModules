@@ -38,7 +38,7 @@ if __name__ == "__main__":
         opponents = [(flame_f, normal_s),
                      (healing_f, defensive_s)]
         print("Tournament 0 (basic)\n"
-              " [ (Flameling+Normal), (Healing+Defensive")
+              " [ (Flameling+Normal), (Healing+Defensive) ]")
         battle(opponents)
 
         opponents = [(flame_f, aggresive_s),
