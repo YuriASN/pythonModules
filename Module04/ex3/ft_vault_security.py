@@ -26,16 +26,19 @@ def secure_archive(file_name: str, action: str = "r",
 
 
 if __name__ == "__main__":
-    print("=== Cyber Archives Security ===\n")
-    print("Using 'secure_archive' to read from a nonexistent file:\n"
-          f"{secure_archive('not/existing/file', 'r')}")
-    print()
-    print("Using 'secure_archive' to read from an inaccessible file:\n"
-          f"{secure_archive('/etc/master.passwd', 'r')}")
-    print()
-    readed = secure_archive("this.txt", "r")
-    print("Using 'secure_archive' to read from a regular file:\n"
-          f"{readed}")
-    print()
-    print("Using 'secure_archive' to write previous content to a new file:\n"
-          f"{secure_archive('newex3', 'w', readed[1])}")
+    try:
+        print("=== Cyber Archives Security ===\n")
+        print("Using 'secure_archive' to read from a nonexistent file:\n"
+            f"{secure_archive('not/existing/file', 'r')}")
+        print()
+        print("Using 'secure_archive' to read from an inaccessible file:\n"
+            f"{secure_archive('perm.txt', 'r')}")
+        print()
+        readed = secure_archive("data.txt", "r")
+        print("Using 'secure_archive' to read from a regular file:\n"
+            f"{readed}")
+        print()
+        print("Using 'secure_archive' to write previous content to a new file:\n"
+            f"{secure_archive('newex3', 'w', readed[1])}")
+    except Exception as err:
+        print(err)
