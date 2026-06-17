@@ -31,7 +31,7 @@ def print_dependencies() -> None:
         raise Exception()
 
 
-def get_region(region: str) -> List[Dict]:
+def get_region(region: str) -> Dict:
     if APIKEY == "":
         raise Exception("Err: No API KEY provided")
     try:
@@ -46,76 +46,65 @@ def get_region(region: str) -> List[Dict]:
         raise Exception(f"Requesting from API: {err}")
 
 
-def print_region_data(region: List[Dict]) -> None:
-    try:
-        for country in region:
-            print(f"{country['name']['common']} {country['flag']}"
-                  f"\n\tArea: {country['area']}km"
-                  f"\n\tPopulation: {country['population']}"
-                  "\n\tCapital: "
-                  f"{', '.join(city for city in country['capital'])}"
-                  "\n\tTimezones: "
-                  f"{', '.join(zone for zone in country['timezones'])}"
-                  "\n\tCurrencies: "
-                  f"{', '.join(str(curr) for curr in country['currencies'])}"
-                  "\n")
-    except Exception as err:
-        raise Exception(f"Printing region data: {err}")
-
-
 if __name__ == "__main__":
     try:
         print("LOADING STATUS: Loading programs...\n")
         print_dependencies()
-        region = get_region("europe")
+        region: List = get_region("europe")["data"]["objects"]
         try:
             df = pd.DataFrame([{
-                "name": country["name"]["common"],
+                "name": country["names"]["common"],
                 "population": country["population"],
-                "area": country["area"],
+                "area": country["area"]["kilometers"],
                 "timezones": country["timezones"],
                 "currencies": country["currencies"]
             } for country in region
             ])
         except Exception as err:
             raise Exception(f"Creating data frame: {err}")
-
-        names = df["name"].to_list()
-        population = df["population"].to_numpy()
-        area = df["area"].to_numpy()
-        timezones = (df.explode("timezones")["timezones"]
-                     .value_counts().sort_index()
-                     )
-        currencies = (df.explode("currencies")["currencies"]
-                      .value_counts().sort_index()
-                      )
+        try:
+            names = df["name"].to_list()
+            population = df["population"].to_numpy()
+            area = df["area"].to_numpy()
+            timezones = (df.explode("timezones")["timezones"]
+                        .value_counts().sort_index()
+                        )
+            currencies = (df.explode("currencies")["currencies"].str["code"]
+                        .value_counts().sort_index()
+            )
+        except Exception as err:
+            raise Exception(f"Transforming data: {err}")
 
         fig, axes = plt.subplots(2, 2, figsize=(25, 12))
 
-        print("Processing data")
+        print("Processing data...")
         axes[0, 0].bar(names, population // 1000, width=0.9)
         axes[0, 0].tick_params(axis='x', rotation=45)
         for label in axes[0, 0].get_xticklabels():
             label.set_ha('right')
-        axes[0, 0].set_title("Population")
+        axes[0, 0].set_title("Population (thousands)")
+        print("\tpopulation ✅")
 
         axes[0, 1].bar(timezones.index, timezones.values, width=0.9)
         axes[0, 1].tick_params(axis='x', rotation=45)
         for label in axes[0, 1].get_xticklabels():
             label.set_ha('right')
         axes[0, 1].set_title("Timezones")
+        print("\tTimezones ✅")
 
         axes[1, 0].bar(names, area, width=0.9)
         axes[1, 0].tick_params(axis='x', rotation=45)
         for label in axes[1, 0].get_xticklabels():
             label.set_ha('right')
-        axes[1, 0].set_title("Area")
+        axes[1, 0].set_title("Area (km)")
+        print("\tArea ✅")
 
         axes[1, 1].bar(currencies.index, currencies.values, width=0.9)
         axes[1, 1].tick_params(axis='x', rotation=45)
         for label in axes[1, 1].get_xticklabels():
             label.set_ha('right')
         axes[1, 1].set_title("Currencies")
+        print("\tCurrencies ✅")
 
         plt.subplots_adjust(
             left=0.1,
