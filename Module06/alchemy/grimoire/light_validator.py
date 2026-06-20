@@ -20,9 +20,9 @@ def validate_ingredients(ingredients: str) -> str:
     usable = light_spell_allowed_ingredients()
     for word in usable:
         word = word.lower()
-    check = "INVALID"
+    check = "VALID"
     for word in words_only(ingredients):
-        if word.lower() in usable:
-            check = "VALID"
+        if word.lower() not in usable:
+            check = "INVALID"
             break
     return (f"{ingredients} - {check}")
