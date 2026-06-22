@@ -15,22 +15,18 @@ def mage_counter() -> Callable:
 
 
 def spell_accumulator(initial_power: int) -> Callable:
-    power = initial_power
-
     def accumulate(power_add: int) -> int:
-        nonlocal power
-        power += power_add
-        return power
+        nonlocal initial_power
+        initial_power += power_add
+        return initial_power
 
     return accumulate
 
 
 def enchantment_factory(enchantment_type: str) -> Callable:
-    enchantment = enchantment_type
-
     def enchant(item_name: str) -> str:
-        nonlocal enchantment
-        return f"{enchantment} {item_name}"
+        nonlocal enchantment_type
+        return f"{enchantment_type} {item_name}"
 
     return enchant
 
