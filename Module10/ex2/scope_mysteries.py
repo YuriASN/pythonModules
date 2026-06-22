@@ -25,7 +25,6 @@ def spell_accumulator(initial_power: int) -> Callable:
 
 def enchantment_factory(enchantment_type: str) -> Callable:
     def enchant(item_name: str) -> str:
-        nonlocal enchantment_type
         return f"{enchantment_type} {item_name}"
 
     return enchant
@@ -35,11 +34,9 @@ def memory_vault() -> dict[str, Callable]:
     data: Dict[Any, Any] = {}
 
     def store(key: Any, value: Any):
-        nonlocal data
         data[key] = value
 
     def recall(key: Any) -> Any:
-        nonlocal data
         if key in data.keys():
             return data[key]
         return "Memory not found"
