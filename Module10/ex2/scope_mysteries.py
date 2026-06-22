@@ -32,13 +32,13 @@ def enchantment_factory(enchantment_type: str) -> Callable:
 
 
 def memory_vault() -> dict[str, Callable]:
-    data: Dict[str, Callable] = {}
+    data: Dict[Any, Any] = {}
 
     def store(key: Any, value: Any):
         nonlocal data
         data[key] = value
 
-    def recall(key: str) -> Any:
+    def recall(key: Any) -> Any:
         nonlocal data
         if key in data.keys():
             return data[key]
