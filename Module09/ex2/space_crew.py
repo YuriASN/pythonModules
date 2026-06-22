@@ -88,7 +88,7 @@ if __name__ == "__main__":
     except Exception as err:
         print(f"Importing data generation module: {err}")
         exit(1)
-    
+
     try:
         print("Space Mission Crew Validation\n"
               "=========================================")
