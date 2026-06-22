@@ -78,9 +78,9 @@ if __name__ == "__main__":
         print("Valid contact report:")
         valid_contact = AlienContact(
             contact_id="AC_Alien_42",
-            timestamp="2026-06-07T11:54:15",
+            timestamp="2026-06-07T11:54:15",  # type: ignore[arg-type]
             location="Lisbon, Portugal",
-            contact_type="radio",
+            contact_type="radio",  # type: ignore[arg-type]
             signal_strength=8.5,
             duration_minutes=47,
             witness_count=5,
@@ -92,9 +92,9 @@ if __name__ == "__main__":
         print("Expected validation error:")
         invalid_contact = AlienContact(
             contact_id="AC_Alien_42",
-            timestamp="2026-06-07T11:54:15",
+            timestamp="2026-06-07T11:54:15",  # type: ignore[arg-type]
             location="Lisbon, Portugal",
-            contact_type="telepathic",
+            contact_type="telepathic",  # type: ignore[arg-type]
             signal_strength=8.5,
             duration_minutes=47,
             witness_count=2,

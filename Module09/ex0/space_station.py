@@ -36,7 +36,7 @@ if __name__ == "__main__":
             crew_size=6,
             power_level=79.4,
             oxygen_level=83.7,
-            last_maintenance="2026-5-30T14:54:15",
+            last_maintenance="2026-5-30T14:54:15",  # type: ignore[arg-type]
             notes=None
         )
 
@@ -48,8 +48,7 @@ if __name__ == "__main__":
             f"Power: {station.power_level}%\n"
             f"Oxygen: {station.oxygen_level}%\n"
             "Status: "
-            f"{'Operational' if station.is_operational
-               else 'Not operational'}"
+            f"{'Operational' if station.is_operational else 'Not operational'}"
         )
         if station.notes:
             print(f"Note: {station.notes}")
@@ -61,8 +60,10 @@ if __name__ == "__main__":
             crew_size=21,
             power_level=79.4,
             oxygen_level=83.7,
-            last_maintenance="2026-5-30T14:54:45",
+            last_maintenance="2026-5-30T14:54:45",  # type: ignore[arg-type]
             notes=None
         )
     except Exception as err:
         print(err)
+
+# https://github.com/pydantic/pydantic/issues/12978 Mypy issue, github request

@@ -48,7 +48,7 @@ class SpaceMission(BaseModel):
         description="Budget for the mission in million dolars")
 
     @model_validator(mode="after")
-    def validate(self) -> "SpaceMission":
+    def validate_mission(self) -> "SpaceMission":
         if not self.mission_id[0] == "M":
             raise ValueError("Mission ID must start with 'M'")
         captain_commander = False
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 CrewMember(
                     member_id="SCN",
                     name="Sarah Connor",
-                    rank="officer",
+                    rank="officer",  # type: ignore[arg-type]
                     age=55,
                     specialization="Cleaning",
                     years_experience=35,
@@ -137,7 +137,7 @@ if __name__ == "__main__":
                 CrewMember(
                     member_id="JSM",
                     name="John Smith",
-                    rank="lieutenant",
+                    rank="lieutenant",  # type: ignore[arg-type]
                     age=40,
                     specialization="Navigation",
                     years_experience=4
@@ -145,7 +145,7 @@ if __name__ == "__main__":
                 CrewMember(
                     member_id="AJH",
                     name="Alice Johnson",
-                    rank="officer",
+                    rank="officer",  # type: ignore[arg-type]
                     age=30,
                     specialization="Engineering",
                     years_experience=4
