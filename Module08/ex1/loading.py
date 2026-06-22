@@ -15,7 +15,7 @@ except ImportError as err:
 
 
 RESTAPI: str = "https://api.restcountries.com/countries/v5"
-APIKEY: str = ""
+APIKEY: str = "rc_live_e3319d518308498e9f3c4d0faceefca4"
 
 
 def print_dependencies() -> None:
@@ -31,17 +31,34 @@ def print_dependencies() -> None:
         raise Exception()
 
 
-def get_region(region: str) -> Dict:
+def get_region(region: str, subregion: str = "",
+               fields: str | List[str] = "") -> Dict:
     if APIKEY == "":
         raise Exception("Err: No API KEY provided")
     try:
+        filters = ""
+        sub_region = ""
+        if len(fields):
+            filters = "&response_fields="
+            if isinstance(fields, str):
+                filters += fields
+            else:
+                for field in fields:
+                    filters += field + ","
+                filters = filters[:-1]
+        if len(subregion):
+            sub_region = "&subregion=" + subregion
         region_data = requests.get(
-            RESTAPI + "?region=" + region,
-            headers={'Authorization': 
+            RESTAPI + "?region=" + region + filters + sub_region,
+            headers={'Authorization':
                      'Bearer ' + APIKEY}
             )
         region_data.raise_for_status()
         return region_data.json()
+    except requests.exceptions.HTTPError as err:
+        raise Exception(f"HTTP error occurred: {err}")
+    except requests.exceptions.RequestException as err:
+        raise Exception(f"Request failed: {err}")
     except Exception as err:
         raise Exception(f"Requesting from API: {err}")
 
@@ -50,14 +67,17 @@ if __name__ == "__main__":
     try:
         print("LOADING STATUS: Loading programs...\n")
         print_dependencies()
-        region: List = get_region("europe")["data"]["objects"]
+        region: List = get_region("americas", "south america", [
+            "names.common", "population", "subregion",
+            "area.kilometers", "timezones", "government_type"
+        ])["data"]["objects"]
         try:
             df = pd.DataFrame([{
                 "name": country["names"]["common"],
                 "population": country["population"],
                 "area": country["area"]["kilometers"],
                 "timezones": country["timezones"],
-                "currencies": country["currencies"]
+                "government_type": country["government_type"]
             } for country in region
             ])
         except Exception as err:
@@ -67,11 +87,11 @@ if __name__ == "__main__":
             population = df["population"].to_numpy()
             area = df["area"].to_numpy()
             timezones = (df.explode("timezones")["timezones"]
-                        .value_counts().sort_index()
-                        )
-            currencies = (df.explode("currencies")["currencies"].str["code"]
-                        .value_counts().sort_index()
-            )
+                         .value_counts().sort_index()
+                         )
+            government_type = (df.explode("government_type")["government_type"]
+                               .value_counts().sort_index()
+                               )
         except Exception as err:
             raise Exception(f"Transforming data: {err}")
 
@@ -92,19 +112,20 @@ if __name__ == "__main__":
         axes[0, 1].set_title("Timezones")
         print("\tTimezones ✅")
 
-        axes[1, 0].bar(names, area, width=0.9)
+        axes[1, 0].bar(names, area/1000, width=0.9)
         axes[1, 0].tick_params(axis='x', rotation=45)
         for label in axes[1, 0].get_xticklabels():
             label.set_ha('right')
-        axes[1, 0].set_title("Area (km)")
+        axes[1, 0].set_title("Area (thousand kms)")
         print("\tArea ✅")
 
-        axes[1, 1].bar(currencies.index, currencies.values, width=0.9)
+        axes[1, 1].bar(government_type.index,
+                       government_type.values, width=0.9)
         axes[1, 1].tick_params(axis='x', rotation=45)
         for label in axes[1, 1].get_xticklabels():
             label.set_ha('right')
-        axes[1, 1].set_title("Currencies")
-        print("\tCurrencies ✅")
+        axes[1, 1].set_title("government_type")
+        print("\tgovernment_type ✅")
 
         plt.subplots_adjust(
             left=0.1,
