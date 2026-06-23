@@ -1,4 +1,4 @@
-#!/usr/bin/env pyhton3
+#!/usr/bin/env python3
 
 from pydantic import BaseModel, Field, model_validator, ValidationError
 from enum import Enum

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
-import functools
+from functools import lru_cache, singledispatch, partial, reduce
 import operator
 from typing import Callable, Any
 
 
 def spell_reducer(spells: list[int], operation: str) -> int:
     try:
-        valid_ops = {"add": functools.reduce(operator.add, spells),
-                     "multiply": functools.reduce(operator.mul, spells),
-                     "max": functools.reduce(max, spells),
-                     "min": functools.reduce(min, spells)}
+        valid_ops = {"add": reduce(operator.add, spells),
+                     "multiply": reduce(operator.mul, spells),
+                     "max": reduce(max, spells),
+                     "min": reduce(min, spells)}
         if operation not in valid_ops.keys():
             raise ValueError(f"Operation '{operation}' is invalid")
         if not spells or not len(spells):
@@ -26,9 +26,9 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
         if not callable(base_enchantment):
             raise TypeError("Base Enchantment isn't callable")
         functions = {
-            "water": functools.partial(base_enchantment, 50, "water"),
-            "fire": functools.partial(base_enchantment, 50, "fire"),
-            "air": functools.partial(base_enchantment, 50, "air")
+            "water": partial(base_enchantment, 50, "water"),
+            "fire": partial(base_enchantment, 50, "fire"),
+            "air": partial(base_enchantment, 50, "air")
         }
     except Exception as err:
         raise Exception(f"partial_enchanter: {err}")
@@ -36,7 +36,7 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
     return functions
 
 
-@functools.lru_cache
+@lru_cache
 def memoized_fibonacci(n: int) -> int:
     if n < 2:
         return n
@@ -45,7 +45,7 @@ def memoized_fibonacci(n: int) -> int:
 
 
 def spell_dispatcher() -> Callable[[Any], str]:
-    @functools.singledispatch
+    @singledispatch
     def dispatch(spell: Any) -> str:
         return "Unknown spell type"
 
