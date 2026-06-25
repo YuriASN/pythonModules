@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from typing import Callable, List, Tuple
+from typing import List, Tuple
+from collections.abc import Callable
 
 
 def spell(target: str, power: int) -> str:

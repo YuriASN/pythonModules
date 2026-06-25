@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from typing import Callable, Any, Dict
+from typing import Any, Dict
+from collections.abc import Callable
 
 
 def mage_counter() -> Callable:
