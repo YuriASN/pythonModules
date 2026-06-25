@@ -2,7 +2,7 @@
 
 
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
-    artifacts.sort(key=lambda each: each["power"])
+    artifacts.sort(key=lambda each: each["power"], reverse=True)
     return artifacts
 
 
@@ -29,23 +29,27 @@ def mage_stats(mages: list[dict]) -> dict:
 
 
 if __name__ == "__main__":
-    artifacts = [{'name': 'Crystal Orb', 'power': 95, 'type': 'weapon'},
-                 {'name': 'Ice Wand', 'power': 116, 'type': 'armor'},
-                 {'name': 'Earth Shield', 'power': 100, 'type': 'armor'},
-                 {'name': 'Ice Wand', 'power': 69, 'type': 'focus'}]
-    mages = [{'name': 'Alex', 'power': 93, 'element': 'wind'},
-             {'name': 'Alex', 'power': 81, 'element': 'fire'},
-             {'name': 'Sage', 'power': 65, 'element': 'shadow'},
-             {'name': 'Casey', 'power': 97, 'element': 'light'},
-             {'name': 'Zara', 'power': 92, 'element': 'fire'}]
-    spells = ['tornado', 'heal', 'darkness', 'earthquake']
+    artifacts = [{"name": "Crystal Orb", "power": 95, "type": "weapon"},
+                 {"name": "Ice Wand", "power": 116, "type": "armor"},
+                 {"name": "Earth Shield", "power": 100, "type": "armor"},
+                 {"name": "Ice Wand", "power": 69, "type": "focus"}]
+    mages = [{"name": "Alex", "power": 93, "element": "wind"},
+             {"name": "Alex", "power": 81, "element": "fire"},
+             {"name": "Sage", "power": 65, "element": "shadow"},
+             {"name": "Casey", "power": 97, "element": "light"},
+             {"name": "Zara", "power": 92, "element": "fire"}]
+    spells = ["tornado", "heal", "darkness", "earthquake"]
 
     print("=== Artifacts sorted ===")
     for artifact in artifacts:
         print(artifact)
+    artifact_sorter(artifacts)
+    print("---")
+    for artifact in artifacts:
+        print(artifact)
 
-    print("=== Spells Transformed ===")
+    print("\n=== Spells Transformed ===")
     print(spell_transformer(spells))
 
-    print("=== Mages Stats ===")
+    print("\n=== Mages Stats ===")
     print(mage_stats(mages))
