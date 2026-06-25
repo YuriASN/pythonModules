@@ -74,10 +74,9 @@ if __name__ == "__main__":
         print(amplified("Troll", 10))
 
         print("\n=== Conditional ===")
-        conditional_spell = conditional_caster(lambda target, power: power > 5,
-                                               heal)
-        print(conditional_spell("Whale", 20))
-        print(conditional_spell("Whale", 5))
+        conditional = conditional_caster(lambda target, power: power > 5, heal)
+        print(conditional("Whale", 20))
+        print(conditional("Whale", 5))
 
         print("\n=== Sequence ===")
         cast_all = spell_sequence([spell, heal, move])
