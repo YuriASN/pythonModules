@@ -26,15 +26,13 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
     try:
         if not callable(base_enchantment):
             raise TypeError("Base Enchantment isn't callable")
-        functions = {
+        return {
             "water": partial(base_enchantment, 50, "water"),
             "fire": partial(base_enchantment, 50, "fire"),
             "air": partial(base_enchantment, 50, "air")
         }
     except Exception as err:
         raise Exception(f"partial_enchanter: {err}")
-
-    return functions
 
 
 @lru_cache
