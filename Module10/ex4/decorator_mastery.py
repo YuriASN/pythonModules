@@ -93,7 +93,7 @@ if __name__ == "__main__":
     print("\n=== Testing MageGuild ===")
     mage = MageGuild()
     print(
-        f"{mage.validate_mage_name("xD")}\n{mage.validate_mage_name("Dobby")}"
-        f"\n{mage.cast_spell("lightining", 15)}\n"
-        f"{mage.cast_spell("lightining", 9)}"
+        f"{mage.validate_mage_name('xD')}\n{mage.validate_mage_name('Dobby')}"
+        f"\n{mage.cast_spell('lightining', 15)}\n"
+        f"{mage.cast_spell('lightining', 9)}"
         )
